@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Counter</string>
+
+    <string name="error_explore_state">Couldn\'t download posts.\nPlease check your connection and try again.</string>
+    <string name="error_general">Oops! Something went wrong</string>
+
+    <string name="action_retry">Retry</string>
+
+    <string name="explore_title">Explore</string>
+    <string name="explore_header">You might also like</string>
+
+    <string name="detail_title">Detail</string>
+</resources>

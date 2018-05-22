@@ -1,0 +1,127 @@
+apply plugin: 'com.android.application'
+
+ext {
+    versions = [
+            android         : [
+                    support       : '27.1.0',
+                    constraint    : '1.1.0-beta5',
+                    architecture  : '1.1.0',
+            ],
+            dagger          : '2.11',
+            butterknife     : '8.8.1',
+            gson            : '2.8.1',
+            retrofit        : '2.4.0',
+            logging         : '3.9.1',
+            rxjava          : '2.0.2',
+            rxandroid       : '2.0.1',
+            stream          : '1.1.9',
+            autovalue       : [
+                    main   : '1.5',
+                    gson   : '0.7.0',
+                    parcel : '0.2.6',
+                    ignore : '1.1.4',
+            ],
+            glide           : '4.1.1',
+            adapterdelegates: '3.0.1',
+            testing         : [
+                    junit   : '4.12',
+                    mockito : '2.5.5',
+                    espresso: '2.2.2',
+            ],
+    ]
+    app = [
+            android    : [
+                    compileSdkVersion : 27,
+                    minSdkVersion     : 15,
+                    buildToolsVersion : '26.0.3',
+            ],
+            versionCode: 1,
+            versionName: '1.0',
+    ]
+}
+
+android {
+    compileSdkVersion app.android.compileSdkVersion
+    buildToolsVersion app.android.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.lucasurbas.counter"
+        minSdkVersion app.android.minSdkVersion
+        targetSdkVersion app.android.compileSdkVersion
+        versionCode app.versionCode
+        versionName app.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    // Android Support
+    compile "com.android.support:appcompat-v7:$versions.android.support"
+    compile "com.android.support:support-v4:$versions.android.support"
+    compile "com.android.support:cardview-v7:$versions.android.support"
+    compile "com.android.support:design:$versions.android.support"
+    compile "com.android.support.constraint:constraint-layout:$versions.android.constraint"
+    compile "com.android.support:support-annotations:$versions.android.support"
+
+    // Android Architecture
+    compile "android.arch.lifecycle:runtime:$versions.android.architecture"
+    compile "android.arch.lifecycle:extensions:$versions.android.architecture"
+    annotationProcessor "android.arch.lifecycle:compiler:$versions.android.architecture"
+
+    // Dagger
+    compile "com.google.dagger:dagger:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    // Butterknife
+    compile "com.jakewharton:butterknife:$versions.butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$versions.butterknife"
+
+    // Gson
+    compile "com.google.code.gson:gson:$versions.gson"
+
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+    compile "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    compile "com.squareup.okhttp3:logging-interceptor:$versions.logging"
+
+    // AutoValue
+    compileOnly "com.jakewharton.auto.value:auto-value-annotations:$versions.autovalue.main"
+    annotationProcessor "com.google.auto.value:auto-value:$versions.autovalue.main"
+    compile "com.ryanharter.auto.value:auto-value-gson-annotations:$versions.autovalue.gson"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$versions.autovalue.gson"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$versions.autovalue.parcel"
+    annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:$versions.autovalue.ignore"
+
+    // Rx
+    compile "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+    compile "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+    compile "com.annimon:stream:$versions.stream"
+
+    // Adapter Delegates
+    compile "com.hannesdorfmann:adapterdelegates3:$versions.adapterdelegates"
+
+    // Image Loading
+    compile "com.github.bumptech.glide:glide:$versions.glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$versions.glide"
+
+    // Test
+    testCompile "junit:junit:$versions.testing.junit"
+    testCompile "org.mockito:mockito-core:$versions.testing.mockito"
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$versions.testing.espresso", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}
