@@ -2,7 +2,7 @@ package rx;
 
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
-import com.lucasurbas.counter.rx.InteractorSchedulers;
+import com.lucasurbas.counter.app.di.rx.InteractorSchedulers;
 
 public class TestInteractorSchedulers implements InteractorSchedulers {
 

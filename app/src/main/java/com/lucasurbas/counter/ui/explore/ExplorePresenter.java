@@ -1,65 +1,72 @@
 package com.lucasurbas.counter.ui.explore;
 
 import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
-import com.annimon.stream.Optional;
+import com.lucasurbas.counter.ui.explore.mapper.UiCounterItemMapper;
+import com.lucasurbas.counter.ui.explore.model.UiCounterItem;
+import com.lucasurbas.counter.ui.explore.usecase.GetCountersUpdatesInteractor;
 
-import java.util.concurrent.Callable;
+import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
-import com.lucasurbas.counter.ui.explore.mapper.UiPostMapper;
-import com.lucasurbas.counter.ui.explore.usecase.GetPostsUpdatesInteractor;
-import com.lucasurbas.counter.ui.explore.usecase.LoadPostsInteractor;
 
 public class ExplorePresenter extends ViewModel {
 
-    private final GetPostsUpdatesInteractor getPostsUpdatesInteractor;
-    private final LoadPostsInteractor loadPostsInteractor;
-    private final UiPostMapper uiPostMapper;
+    private final GetCountersUpdatesInteractor getCountersUpdatesInteractor;
+    private final UiCounterItemMapper uiCounterItemMapper;
 
-    private final PublishSubject<String> loadPostsActionSubject = PublishSubject.create();
+    private final PublishSubject<String> createCounterActionSubject = PublishSubject.create();
     private final BehaviorSubject<UiExploreState> stateSubject = BehaviorSubject.create();
 
     private final CompositeDisposable stateDisposables = new CompositeDisposable();
     private Disposable mainDisposable;
 
-    public ExplorePresenter(GetPostsUpdatesInteractor getPostsUpdatesInteractor,
-            LoadPostsInteractor loadPostsInteractor,
-            UiPostMapper uiPostMapper) {
-        this.getPostsUpdatesInteractor = getPostsUpdatesInteractor;
-        this.loadPostsInteractor = loadPostsInteractor;
-        this.uiPostMapper = uiPostMapper;
+    public ExplorePresenter(GetCountersUpdatesInteractor getCountersUpdatesInteractor,
+                            UiCounterItemMapper uiCounterItemMapper) {
+        this.getCountersUpdatesInteractor = getCountersUpdatesInteractor;
+        this.uiCounterItemMapper = uiCounterItemMapper;
 
         init();
     }
 
     private void init() {
-        Observable<UiExploreState.Part> loadPostsAction = loadPostsActionSubject
-                .flatMap(userId -> loadPostsInteractor.loadPostsToRepository(userId)
-                        .andThen(Observable.fromCallable((Callable<UiExploreState.Part>) UiExploreState.Part.PostsLoaded::new))
-                        .startWith(new UiExploreState.Part.Loading())
+        Observable<UiExploreState.Part> loadCountersAction = Observable.empty();
+
+        Observable<UiExploreState.Part> getCountersUpdates = getCountersUpdatesInteractor.getCountersUpdates()
+                .flatMap(counterList -> Flowable.fromIterable(counterList)
+                        .map(uiCounterItemMapper::toUiCounterItem)
+                        .toList()
+                        .toObservable()
+                        .map((Function<List<UiCounterItem>, UiExploreState.Part>) UiExploreState.Part.CounterList::new)
                         .onErrorReturn(UiExploreState.Part.Error::new));
 
-        Observable<UiExploreState.Part> getPostsUpdates = getPostsUpdatesInteractor.getPostsUpdates()
-                        .flatMap(postList -> Observable.fromIterable(postList)
-                                .map(uiPostMapper::toUiPostItem)
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .toList().toObservable())
-                        .map(UiExploreState.Part.Posts::new);
+//        Flowable<UiExploreState.Part> getCountersUpdates = getCountersUpdatesInteractor.getCountersUpdates()
+//                .flatMap(counterList -> Flowable.fromIterable(counterList)
+//                        .map(uiCounterItemMapper::toUiCounterItem)
+//                        .toList()
+//                        .map((Function<List<UiCounterItem>, UiExploreState.Part>) UiExploreState.Part.CounterList::new)
+//                        .onErrorReturn(UiExploreState.Part.Error::new);
 
-        mainDisposable = Observable.merge(loadPostsAction, getPostsUpdates)
+        mainDisposable = Observable.merge(loadCountersAction, getCountersUpdates)
                 .scan(UiExploreState.initialState(), this::viewStateReducer)
                 .distinctUntilChanged()
-                .subscribe(stateSubject::onNext);
+                .subscribe(this::nextState);
     }
 
     private UiExploreState viewStateReducer(UiExploreState previousState, UiExploreState.Part changes) {
         return changes.computeNewState(previousState);
+    }
+
+    private void nextState(UiExploreState state) {
+        Log.v("TAG_ExplorePresenter", state.toString());
+        stateSubject.onNext(state);
     }
 
     public void attachView(ExplorePresenter.View view) {
@@ -77,14 +84,8 @@ public class ExplorePresenter extends ViewModel {
         mainDisposable.dispose();
     }
 
-    public void loadPosts(final String userId) {
-        loadPostsActionSubject.onNext(userId);
-    }
-
-    public void loadPostsIfNeeded(final String userId) {
-        if (!stateSubject.hasValue() || stateSubject.getValue().equals(UiExploreState.initialState())) {
-            loadPostsActionSubject.onNext(userId);
-        }
+    public void createCounter() {
+        createCounterActionSubject.onNext("");
     }
 
     public interface View {

@@ -8,25 +8,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.hannesdorfmann.adapterdelegates3.AdapterDelegatesManager;
+import com.lucasurbas.counter.ui.explore.model.UiListItem;
+import com.lucasurbas.counter.utils.ListItemDiffCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lucasurbas.counter.ui.explore.model.UiListItem;
-import com.lucasurbas.counter.utils.ListItemDiffCallback;
-
 public class ExploreAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_HEADER = 1;
-    private static final int TYPE_POST = 2;
+    private static final int TYPE_COUNTER = 2;
 
     private AdapterDelegatesManager<List<UiListItem>> delegatesManager;
     private List<UiListItem> itemList = new ArrayList<>();
 
-    public ExploreAdapter(PostItemAdapterDelegate.OnPostItemClickListener postItemClickListener) {
+    public ExploreAdapter(CountertemAdapterDelegate.OnCounterItemClickListener counterItemClickListener) {
         delegatesManager = new AdapterDelegatesManager<>();
         delegatesManager.addDelegate(TYPE_HEADER, new HeaderItemAdapterDelegate())
-                .addDelegate(TYPE_POST, new PostItemAdapterDelegate(postItemClickListener));
+                .addDelegate(TYPE_COUNTER, new CountertemAdapterDelegate(counterItemClickListener));
     }
 
     @Override
@@ -74,10 +73,10 @@ public class ExploreAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void updateItemList(@Nullable List<UiListItem> postList) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListItemDiffCallback(itemList, postList));
+    public void updateItemList(@Nullable List<UiListItem> newItemList) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListItemDiffCallback(itemList, newItemList));
         itemList.clear();
-        itemList.addAll(postList);
+        itemList.addAll(newItemList);
         diffResult.dispatchUpdatesTo(this);
     }
 }

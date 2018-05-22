@@ -4,14 +4,15 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.Fragment;
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.multibindings.IntoMap;
 import com.lucasurbas.counter.app.di.vm.ViewModelFactory;
 import com.lucasurbas.counter.app.di.vm.ViewModelKey;
 import com.lucasurbas.counter.ui.detail.DetailPresenter;
-import com.lucasurbas.counter.ui.detail.usecase.GetPostInteractor;
-import com.lucasurbas.counter.ui.detail.usecase.MarkPostAsReadInteractor;
+import com.lucasurbas.counter.ui.detail.mapper.UiCounterDetailMapper;
+import com.lucasurbas.counter.ui.detail.usecase.GetCounterUpdateInteractor;
+
+import dagger.Module;
+import dagger.Provides;
+import dagger.multibindings.IntoMap;
 
 @Module
 public class DetailFragmentModule {
@@ -24,8 +25,8 @@ public class DetailFragmentModule {
     @Provides
     @IntoMap
     @ViewModelKey(DetailPresenter.class)
-    ViewModel provideViewModel(GetPostInteractor getPostInteractor,
-            MarkPostAsReadInteractor markPostAsReadInteractor) {
-        return new DetailPresenter(getPostInteractor, markPostAsReadInteractor);
+    ViewModel provideViewModel(GetCounterUpdateInteractor getCounterUpdateInteractor,
+                               UiCounterDetailMapper uiMapper) {
+        return new DetailPresenter(getCounterUpdateInteractor, uiMapper);
     }
 }

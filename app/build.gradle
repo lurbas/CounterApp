@@ -9,15 +9,11 @@ ext {
             ],
             dagger          : '2.11',
             butterknife     : '8.8.1',
-            gson            : '2.8.1',
-            retrofit        : '2.4.0',
-            logging         : '3.9.1',
             rxjava          : '2.0.2',
             rxandroid       : '2.0.1',
             stream          : '1.1.9',
             autovalue       : [
                     main   : '1.5',
-                    gson   : '0.7.0',
                     parcel : '0.2.6',
                     ignore : '1.1.4',
             ],
@@ -89,20 +85,9 @@ dependencies {
     compile "com.jakewharton:butterknife:$versions.butterknife"
     annotationProcessor "com.jakewharton:butterknife-compiler:$versions.butterknife"
 
-    // Gson
-    compile "com.google.code.gson:gson:$versions.gson"
-
-    // Retrofit
-    compile "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
-    compile "com.squareup.retrofit2:converter-gson:$versions.retrofit"
-    compile "com.squareup.okhttp3:logging-interceptor:$versions.logging"
-
     // AutoValue
     compileOnly "com.jakewharton.auto.value:auto-value-annotations:$versions.autovalue.main"
     annotationProcessor "com.google.auto.value:auto-value:$versions.autovalue.main"
-    compile "com.ryanharter.auto.value:auto-value-gson-annotations:$versions.autovalue.gson"
-    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$versions.autovalue.gson"
     annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$versions.autovalue.parcel"
     annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:$versions.autovalue.ignore"
 

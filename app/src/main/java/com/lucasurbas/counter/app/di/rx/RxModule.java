@@ -1,9 +1,7 @@
-package com.lucasurbas.counter.rx.di;
+package com.lucasurbas.counter.app.di.rx;
 
 import dagger.Binds;
 import dagger.Module;
-import com.lucasurbas.counter.rx.AndroidInteractorSchedulers;
-import com.lucasurbas.counter.rx.InteractorSchedulers;
 
 @Module
 public abstract class RxModule {

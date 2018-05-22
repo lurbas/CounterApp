@@ -1,19 +1,20 @@
 package com.lucasurbas.counter.data.repository.di;
 
+import com.lucasurbas.counter.data.repository.CounterRepository;
+import com.lucasurbas.counter.data.repository.MemoryCounterRepository;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import com.lucasurbas.counter.data.repository.MemoryPostRepository;
-import com.lucasurbas.counter.data.repository.PostRepository;
 
 @Module
 public class RepositoryModule {
 
     @Provides
     @Singleton
-    PostRepository providePostRepository() {
-        return new MemoryPostRepository();
+    CounterRepository provideCounterRepository() {
+        return new MemoryCounterRepository();
     }
 
 }

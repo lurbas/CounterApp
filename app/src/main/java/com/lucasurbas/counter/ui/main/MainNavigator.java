@@ -26,9 +26,9 @@ public class MainNavigator {
                 .commit();
     }
 
-    public void navigateToDetailScreen(final int postId) {
+    public void navigateToDetailScreen(final int counterId) {
         fragmentManager.beginTransaction()
-                .replace(containerId, DetailFragment.newInstance(postId), DetailFragment.TAG)
+                .replace(containerId, DetailFragment.newInstance(counterId), DetailFragment.TAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null)
                 .commit();

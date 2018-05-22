@@ -10,14 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.TextView;
 
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.lucasurbas.counter.R;
 import com.lucasurbas.counter.app.di.FragmentModule;
 import com.lucasurbas.counter.app.di.helper.InjectHelper;
@@ -25,23 +19,29 @@ import com.lucasurbas.counter.ui.BaseFragment;
 import com.lucasurbas.counter.ui.detail.di.DetailFragmentModule;
 import com.lucasurbas.counter.ui.main.di.MainActivityComponent;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class DetailFragment extends BaseFragment implements DetailPresenter.View {
 
     public static final String TAG = DetailFragment.class.getSimpleName();
-    private static final String POST_ID_KEY = "post_id_key";
+    private static final String COUNTER_ID_KEY = "counter_id_key";
+
+    @BindView(R.id.value_view)
+    TextView valueView;
 
     @Inject
     DetailPresenter presenter;
 
-    @BindView(R.id.web_view)
-    WebView webView;
-
     private Unbinder unbinder;
 
-    public static Fragment newInstance(int postId) {
+    public static Fragment newInstance(int counterId) {
         DetailFragment fragment = new DetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(POST_ID_KEY, postId);
+        bundle.putInt(COUNTER_ID_KEY, counterId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -55,7 +55,7 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
@@ -67,7 +67,7 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
         setupToolbar();
 
         presenter.attachView(this);
-        presenter.getPostIfNeeded(getArguments().getInt(POST_ID_KEY));
+        presenter.getCounter(getArguments().getInt(COUNTER_ID_KEY));
     }
 
     @Override
@@ -86,16 +86,8 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
     @Override
     public void render(UiDetailState uiDetailState) {
 
-        if (uiDetailState.getUrl() != null && !uiDetailState.getUrl().equals(webView.getUrl())) {
-            webView.loadUrl(uiDetailState.getUrl());
-            webView.setWebViewClient(new WebViewClient() {
-
-                public void onPageFinished(WebView view, String url) {
-                    if (isAdded()) {
-                        presenter.markPostAsRead(getArguments().getInt(POST_ID_KEY));
-                    }
-                }
-            });
+        if (uiDetailState.getCounter() != null) {
+            valueView.setText(uiDetailState.getCounter().getStringValue());
         }
 
         if (uiDetailState.getError() != null) {

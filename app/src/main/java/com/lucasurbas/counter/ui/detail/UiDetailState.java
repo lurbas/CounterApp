@@ -3,21 +3,18 @@ package com.lucasurbas.counter.ui.detail;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-
-import com.lucasurbas.counter.data.model.Post;
+import com.lucasurbas.counter.ui.detail.model.UiCounterDetail;
 
 @AutoValue
 public abstract class UiDetailState {
 
-    abstract boolean getIsLoading();
     @Nullable
-    abstract String getUrl();
+    abstract UiCounterDetail getCounter();
     @Nullable
     abstract Throwable getError();
 
     private static UiDetailState.Builder builder() {
-        return new AutoValue_UiDetailState.Builder()
-                .isLoading(false);
+        return new AutoValue_UiDetailState.Builder();
     }
 
     abstract Builder toBuilder();
@@ -29,9 +26,7 @@ public abstract class UiDetailState {
     @AutoValue.Builder
     abstract static class Builder {
 
-        abstract Builder isLoading(boolean value);
-
-        abstract Builder url(String value);
+        abstract Builder counter(UiCounterDetail value);
 
         abstract Builder error(Throwable value);
 
@@ -41,17 +36,6 @@ public abstract class UiDetailState {
     public interface Part {
 
         UiDetailState computeNewState(UiDetailState previousState);
-
-        class Loading implements UiDetailState.Part {
-
-            @Override
-            public UiDetailState computeNewState(UiDetailState previousState) {
-                return previousState.toBuilder()
-                        .isLoading(true)
-                        .error(null)
-                        .build();
-            }
-        }
 
         class Error implements UiDetailState.Part {
 
@@ -64,25 +48,23 @@ public abstract class UiDetailState {
             @Override
             public UiDetailState computeNewState(UiDetailState previousState) {
                 return previousState.toBuilder()
-                        .isLoading(false)
                         .error(error)
                         .build();
             }
         }
 
-        class LoadedPost implements UiDetailState.Part {
+        class CounterItem implements UiDetailState.Part {
 
-            private Post post;
+            private UiCounterDetail counter;
 
-            public LoadedPost(Post post) {
-                this.post = post;
+            public CounterItem(UiCounterDetail counter) {
+                this.counter = counter;
             }
 
             @Override
             public UiDetailState computeNewState(UiDetailState previousState) {
                 return previousState.toBuilder()
-                        .isLoading(false)
-                        .url(post.getLinkUrl())
+                        .counter(counter)
                         .error(null)
                         .build();
             }

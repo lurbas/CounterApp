@@ -3,27 +3,22 @@ package com.lucasurbas.counter.ui.explore;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.lucasurbas.counter.ui.explore.model.UiCounterItem;
+import com.lucasurbas.counter.ui.explore.model.UiHeaderItem;
+import com.lucasurbas.counter.ui.explore.model.UiListItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lucasurbas.counter.ui.explore.model.UiHeaderItem;
-import com.lucasurbas.counter.ui.explore.model.UiListItem;
-import com.lucasurbas.counter.ui.explore.model.UiPostItem;
-
 @AutoValue
 public abstract class UiExploreState {
 
-    abstract boolean getIsLoading();
-
     abstract List<UiListItem> getItemList();
-
     @Nullable
     abstract Throwable getError();
 
     private static UiExploreState.Builder builder() {
         return new AutoValue_UiExploreState.Builder()
-                .isLoading(false)
                 .itemList(new ArrayList<>());
     }
 
@@ -36,8 +31,6 @@ public abstract class UiExploreState {
     @AutoValue.Builder
     abstract static class Builder {
 
-        abstract Builder isLoading(boolean value);
-
         abstract Builder itemList(List<UiListItem> value);
 
         abstract Builder error(Throwable value);
@@ -48,17 +41,6 @@ public abstract class UiExploreState {
     public interface Part {
 
         UiExploreState computeNewState(UiExploreState previousState);
-
-        class Loading implements UiExploreState.Part {
-
-            @Override
-            public UiExploreState computeNewState(UiExploreState previousState) {
-                return previousState.toBuilder()
-                        .isLoading(true)
-                        .error(null)
-                        .build();
-            }
-        }
 
         class Error implements UiExploreState.Part {
 
@@ -71,41 +53,31 @@ public abstract class UiExploreState {
             @Override
             public UiExploreState computeNewState(UiExploreState previousState) {
                 return previousState.toBuilder()
-                        .isLoading(false)
                         .error(error)
                         .build();
             }
         }
 
-        class PostsLoaded implements UiExploreState.Part {
+        class CounterList implements UiExploreState.Part {
 
-            @Override
-            public UiExploreState computeNewState(UiExploreState previousState) {
-                return previousState.toBuilder()
-                        .isLoading(false)
-                        .build();
-            }
-        }
+            private List<UiCounterItem> uiCounterItemList;
 
-        class Posts implements UiExploreState.Part {
-
-            private List<UiPostItem> uiPostItemList;
-
-            public Posts(List<UiPostItem> uiPostItemList) {
-                this.uiPostItemList = uiPostItemList;
+            public CounterList(List<UiCounterItem> uiCounterItemList) {
+                this.uiCounterItemList = uiCounterItemList;
             }
 
             @Override
             public UiExploreState computeNewState(UiExploreState previousState) {
                 return previousState.toBuilder()
-                        .itemList(calculateListData(uiPostItemList))
+                        .error(null)
+                        .itemList(calculateListData(uiCounterItemList))
                         .build();
             }
 
-            private List<UiListItem> calculateListData(List<UiPostItem> uiPostItemList) {
+            private List<UiListItem> calculateListData(List<UiCounterItem> uiCounterItemList) {
                 List<UiListItem> data = new ArrayList<>();
                 data.add(UiHeaderItem.newInstance());
-                data.addAll(uiPostItemList);
+                data.addAll(uiCounterItemList);
                 return data;
             }
         }

@@ -1,4 +1,4 @@
-package com.lucasurbas.counter.rx;
+package com.lucasurbas.counter.app.di.rx;
 
 import io.reactivex.Scheduler;
 
