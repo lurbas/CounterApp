@@ -70,7 +70,7 @@ public class DetailPresenter extends ViewModel {
 
     public interface View {
 
-        void render(UiDetailState exploreState);
+        void render(UiDetailState detailState);
 
     }
 }

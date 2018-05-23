@@ -7,4 +7,6 @@ public interface InteractorSchedulers {
     Scheduler getBackgroundScheduler();
 
     Scheduler getMainThreadScheduler();
+
+    Scheduler getSingleScheduler();
 }

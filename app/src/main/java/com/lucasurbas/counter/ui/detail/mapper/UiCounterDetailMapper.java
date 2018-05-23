@@ -25,7 +25,7 @@ public class UiCounterDetailMapper {
     public static String formatMillis(long timeInMillis) {
         long minutes = timeInMillis / TimeUnit.MINUTES.toMillis(1);
         long seconds = timeInMillis % TimeUnit.MINUTES.toMillis(1) / TimeUnit.SECONDS.toMillis(1);
-        long millis = timeInMillis % TimeUnit.SECONDS.toMillis(1);
+        long millis = timeInMillis % TimeUnit.SECONDS.toMillis(1) / 10;
 
         return String.format(Locale.ROOT, "%02d:%02d:%02d", minutes, seconds, millis);
     }

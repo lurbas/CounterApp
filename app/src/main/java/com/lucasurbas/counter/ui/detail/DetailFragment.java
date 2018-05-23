@@ -1,5 +1,6 @@
 package com.lucasurbas.counter.ui.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,20 +11,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.lucasurbas.counter.R;
 import com.lucasurbas.counter.app.di.FragmentModule;
 import com.lucasurbas.counter.app.di.helper.InjectHelper;
+import com.lucasurbas.counter.service.RunningCounterService;
 import com.lucasurbas.counter.ui.BaseFragment;
 import com.lucasurbas.counter.ui.detail.di.DetailFragmentModule;
+import com.lucasurbas.counter.ui.detail.model.UiCounterDetail;
 import com.lucasurbas.counter.ui.main.di.MainActivityComponent;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class DetailFragment extends BaseFragment implements DetailPresenter.View {
 
@@ -32,6 +40,10 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
 
     @BindView(R.id.value_view)
     TextView valueView;
+    @BindView(R.id.start_button)
+    Button startButton;
+    @BindView(R.id.stop_button)
+    Button stopButton;
 
     @Inject
     DetailPresenter presenter;
@@ -85,13 +97,29 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
 
     @Override
     public void render(UiDetailState uiDetailState) {
-
-        if (uiDetailState.getCounter() != null) {
+        UiCounterDetail counter = uiDetailState.getCounter();
+        if (counter != null) {
+            startButton.setVisibility(counter.getIsRunning() ? GONE : VISIBLE);
+            stopButton.setVisibility(counter.getIsRunning() ? VISIBLE : GONE);
             valueView.setText(uiDetailState.getCounter().getStringValue());
         }
 
         if (uiDetailState.getError() != null) {
             Snackbar.make(getView(), R.string.error_general, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @OnClick(R.id.start_button)
+    void onStartClick() {
+        Intent intent = RunningCounterService.newInstance(getActivity(),
+                RunningCounterService.ACTION_START, getArguments().getInt(COUNTER_ID_KEY));
+        getActivity().startService(intent);
+    }
+
+    @OnClick(R.id.stop_button)
+    void onStopClick() {
+        Intent intent = RunningCounterService.newInstance(getActivity(),
+                RunningCounterService.ACTION_STOP, getArguments().getInt(COUNTER_ID_KEY));
+        getActivity().startService(intent);
     }
 }

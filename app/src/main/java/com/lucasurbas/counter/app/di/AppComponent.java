@@ -5,6 +5,8 @@ import android.content.Context;
 import com.lucasurbas.counter.app.di.rx.RxModule;
 import com.lucasurbas.counter.app.di.vm.ViewModelModule;
 import com.lucasurbas.counter.data.repository.di.RepositoryModule;
+import com.lucasurbas.counter.service.di.RunningCounterServiceComponent;
+import com.lucasurbas.counter.service.di.RunningCounterServiceModule;
 import com.lucasurbas.counter.ui.main.di.MainActivityComponent;
 import com.lucasurbas.counter.ui.main.di.MainActivityModule;
 
@@ -26,5 +28,7 @@ public interface AppComponent {
     Context getContext();
 
     MainActivityComponent plus(ActivityModule activityModule, MainActivityModule mainActivityModule);
+
+    RunningCounterServiceComponent plus(RunningCounterServiceModule runningCounterServiceModule);
 
 }

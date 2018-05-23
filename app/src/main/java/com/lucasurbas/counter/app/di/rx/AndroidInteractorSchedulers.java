@@ -21,4 +21,9 @@ public class AndroidInteractorSchedulers implements InteractorSchedulers {
     public Scheduler getMainThreadScheduler() {
         return AndroidSchedulers.mainThread();
     }
+
+    @Override
+    public Scheduler getSingleScheduler() {
+        return Schedulers.single();
+    }
 }

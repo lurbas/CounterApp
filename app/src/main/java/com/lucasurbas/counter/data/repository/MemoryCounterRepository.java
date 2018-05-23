@@ -57,14 +57,16 @@ public class MemoryCounterRepository implements CounterRepository {
     }
 
     @Override
-    public Completable updateCounter(Counter updatedCounter) {
+    public Completable updateCounter(final Counter updatedCounter) {
         return Completable.fromRunnable(() -> {
-            List<Counter> list = Stream.of(counterList)
-                    .map(counter -> counter.isIdEqual(updatedCounter.getId()) ? updatedCounter : counter)
-                    .toList();
-            counterList.clear();
-            counterList.addAll(list);
-            counterListSubject.onNext(counterList);
+            synchronized (counterList) {
+                List<Counter> list = Stream.of(counterList)
+                        .map(counter -> counter.isIdEqual(updatedCounter.getId()) ? updatedCounter : counter)
+                        .toList();
+                counterList.clear();
+                counterList.addAll(list);
+                counterListSubject.onNext(counterList);
+            }
         });
     }
 }

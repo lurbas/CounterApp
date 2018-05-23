@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Counter</string>
+    <string name="app_name">Counter App</string>
 
     <string name="error_explore_state">Error:\nCouldn\'t load data.</string>
     <string name="error_general">Oops! Something went wrong</string>
@@ -12,4 +12,6 @@
     <string name="detail_title">Detail</string>
     <string name="detail_start">Start</string>
     <string name="detail_stop">Stop</string>
+
+    <string name="notification_running_format">%d running</string>
 </resources>

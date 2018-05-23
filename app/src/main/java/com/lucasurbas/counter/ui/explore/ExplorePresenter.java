@@ -9,7 +9,6 @@ import com.lucasurbas.counter.ui.explore.usecase.GetCountersUpdatesInteractor;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -40,7 +39,7 @@ public class ExplorePresenter extends ViewModel {
         Observable<UiExploreState.Part> loadCountersAction = Observable.empty();
 
         Observable<UiExploreState.Part> getCountersUpdates = getCountersUpdatesInteractor.getCountersUpdates()
-                .flatMap(counterList -> Flowable.fromIterable(counterList)
+                .flatMap(counterList -> Observable.fromIterable(counterList)
                         .map(uiCounterItemMapper::toUiCounterItem)
                         .toList()
                         .toObservable()

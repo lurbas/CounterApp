@@ -12,7 +12,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -36,7 +36,7 @@ public class ExplorePresenterTest {
 
     @Before
     public void setup() {
-        given(getCountersUpdatesInteractor.getCountersUpdates()).willReturn(Flowable.empty());
+        given(getCountersUpdatesInteractor.getCountersUpdates()).willReturn(Observable.empty());
         sut = new ExplorePresenter(getCountersUpdatesInteractor, uiCounterItemMapper);
     }
 
