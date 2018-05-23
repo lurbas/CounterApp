@@ -23,9 +23,13 @@ import com.lucasurbas.counter.ui.detail.di.DetailFragmentModule;
 import com.lucasurbas.counter.ui.detail.model.UiCounterDetail;
 import com.lucasurbas.counter.ui.main.di.MainActivityComponent;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -44,6 +48,8 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
     Button startButton;
     @BindView(R.id.stop_button)
     Button stopButton;
+    @BindViews({R.id.preset_1_button, R.id.preset_2_button, R.id.preset_3_button, R.id.preset_4_button})
+    List<Button> presetViews;
 
     @Inject
     DetailPresenter presenter;
@@ -99,6 +105,8 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
     public void render(UiDetailState uiDetailState) {
         UiCounterDetail counter = uiDetailState.getCounter();
         if (counter != null) {
+            ButterKnife.apply(presetViews, (ButterKnife.Action<Button>) (view, index) ->
+                    view.setEnabled(!counter.getIsRunning()));
             startButton.setVisibility(counter.getIsRunning() ? GONE : VISIBLE);
             stopButton.setVisibility(counter.getIsRunning() ? VISIBLE : GONE);
             valueView.setText(uiDetailState.getCounter().getStringValue());
@@ -121,5 +129,29 @@ public class DetailFragment extends BaseFragment implements DetailPresenter.View
         Intent intent = RunningCounterService.newInstance(getActivity(),
                 RunningCounterService.ACTION_STOP, getArguments().getInt(COUNTER_ID_KEY));
         getActivity().startService(intent);
+    }
+
+    @OnClick(R.id.preset_1_button)
+    void onPreset1Click() {
+        presenter.updateInitialValue(getArguments().getInt(COUNTER_ID_KEY),
+                TimeUnit.SECONDS.toMillis(30));
+    }
+
+    @OnClick(R.id.preset_2_button)
+    void onPreset2Click() {
+        presenter.updateInitialValue(getArguments().getInt(COUNTER_ID_KEY),
+                TimeUnit.MINUTES.toMillis(2));
+    }
+
+    @OnClick(R.id.preset_3_button)
+    void onPreset3Click() {
+        presenter.updateInitialValue(getArguments().getInt(COUNTER_ID_KEY),
+                TimeUnit.MINUTES.toMillis(10));
+    }
+
+    @OnClick(R.id.preset_4_button)
+    void onPreset4Click() {
+        presenter.updateInitialValue(getArguments().getInt(COUNTER_ID_KEY),
+                TimeUnit.MINUTES.toMillis(30));
     }
 }

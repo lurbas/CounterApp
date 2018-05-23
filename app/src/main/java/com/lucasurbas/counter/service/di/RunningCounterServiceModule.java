@@ -4,9 +4,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 
 import com.lucasurbas.counter.app.di.scope.ServiceScope;
+import com.lucasurbas.counter.service.AndroidTimers;
+import com.lucasurbas.counter.service.RunningCounterPresenter;
+import com.lucasurbas.counter.service.Timers;
 import com.lucasurbas.counter.service.usecase.GetCounterInteractor;
 import com.lucasurbas.counter.service.usecase.GetRunningCountersUpdatesInteractor;
-import com.lucasurbas.counter.service.RunningCounterPresenter;
 import com.lucasurbas.counter.service.usecase.UpdateCounterInteractor;
 import com.lucasurbas.counter.ui.explore.mapper.UiCounterItemMapper;
 
@@ -17,16 +19,23 @@ import dagger.Provides;
 public class RunningCounterServiceModule {
 
     @Provides
+    Timers provideTimers() {
+        return new AndroidTimers();
+    }
+
+    @Provides
     @ServiceScope
     RunningCounterPresenter provideCounterServicePresenter(
             GetRunningCountersUpdatesInteractor getRunningCountersUpdatesInteractor,
             GetCounterInteractor getCounterInteractor,
             UpdateCounterInteractor updateCounterInteractor,
-            UiCounterItemMapper uiMapper) {
+            UiCounterItemMapper uiMapper,
+            Timers timers) {
         return new RunningCounterPresenter(getRunningCountersUpdatesInteractor,
                 getCounterInteractor,
                 updateCounterInteractor,
-                uiMapper);
+                uiMapper,
+                timers);
     }
 
     @Provides

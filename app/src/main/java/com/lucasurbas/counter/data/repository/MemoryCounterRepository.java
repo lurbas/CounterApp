@@ -19,16 +19,31 @@ public class MemoryCounterRepository implements CounterRepository {
 
     public MemoryCounterRepository() {
         counterList = new ArrayList<>();
+        counterListSubject = BehaviorSubject.create();
+    }
+
+    public void initData(){
         counterList.add(Counter.builder()
                 .id(1)
-                .initialValue(TimeUnit.MINUTES.toMillis(5))
-                .value(TimeUnit.MINUTES.toMillis(5))
+                .value(TimeUnit.SECONDS.toMillis(30))
                 .build());
         counterList.add(Counter.builder()
                 .id(2)
-                .initialValue(TimeUnit.MINUTES.toMillis(30))
+                .value(TimeUnit.MINUTES.toMillis(2))
+                .build());
+        counterList.add(Counter.builder()
+                .id(3)
+                .value(TimeUnit.MINUTES.toMillis(5))
+                .build());
+        counterList.add(Counter.builder()
+                .id(4)
                 .value(TimeUnit.MINUTES.toMillis(30))
                 .build());
+        counterListSubject = BehaviorSubject.createDefault(counterList);
+    }
+
+    public void initData(List<Counter> list){
+        counterList.addAll(list);
         counterListSubject = BehaviorSubject.createDefault(counterList);
     }
 
@@ -59,14 +74,12 @@ public class MemoryCounterRepository implements CounterRepository {
     @Override
     public Completable updateCounter(final Counter updatedCounter) {
         return Completable.fromRunnable(() -> {
-            synchronized (counterList) {
-                List<Counter> list = Stream.of(counterList)
-                        .map(counter -> counter.isIdEqual(updatedCounter.getId()) ? updatedCounter : counter)
-                        .toList();
-                counterList.clear();
-                counterList.addAll(list);
-                counterListSubject.onNext(counterList);
-            }
+            List<Counter> list = Stream.of(counterList)
+                    .map(counter -> counter.isIdEqual(updatedCounter.getId()) ? updatedCounter : counter)
+                    .toList();
+            counterList.clear();
+            counterList.addAll(list);
+            counterListSubject.onNext(new ArrayList<>(counterList));
         });
     }
 }

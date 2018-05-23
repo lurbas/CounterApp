@@ -56,10 +56,10 @@ public class RunningCounterService extends Service implements RunningCounterPres
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction().equals(ACTION_START)) {
+        if (intent.getAction() != null && intent.getAction().equals(ACTION_START)) {
             int counterId = intent.getIntExtra(COUNTER_ID_KEY, 0);
             presenter.startCounter(counterId);
-        } else if (intent.getAction().equals(ACTION_STOP)) {
+        } else if (intent.getAction() != null && intent.getAction().equals(ACTION_STOP)) {
             int counterId = intent.getIntExtra(COUNTER_ID_KEY, 0);
             presenter.stopCounter(counterId);
         }

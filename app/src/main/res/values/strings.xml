@@ -12,6 +12,11 @@
     <string name="detail_title">Detail</string>
     <string name="detail_start">Start</string>
     <string name="detail_stop">Stop</string>
+    <string name="detail_preset_1">30\nsec</string>
+    <string name="detail_preset_2">2\nmin</string>
+    <string name="detail_preset_3">10\nmin</string>
+    <string name="detail_preset_4">30\nmin</string>
+    <string name="detail_header">Set time to count</string>
 
     <string name="notification_running_format">%d running</string>
 </resources>

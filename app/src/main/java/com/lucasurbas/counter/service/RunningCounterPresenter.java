@@ -1,7 +1,5 @@
 package com.lucasurbas.counter.service;
 
-import android.os.CountDownTimer;
-
 import com.lucasurbas.counter.data.model.Counter;
 import com.lucasurbas.counter.service.usecase.GetCounterInteractor;
 import com.lucasurbas.counter.service.usecase.GetRunningCountersUpdatesInteractor;
@@ -9,9 +7,7 @@ import com.lucasurbas.counter.service.usecase.UpdateCounterInteractor;
 import com.lucasurbas.counter.ui.explore.mapper.UiCounterItemMapper;
 import com.lucasurbas.counter.ui.explore.model.UiCounterItem;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
@@ -27,23 +23,24 @@ public class RunningCounterPresenter {
     private final GetCounterInteractor getCounterInteractor;
     private final UpdateCounterInteractor updateCounterInteractor;
     private final UiCounterItemMapper uiCounterItemMapper;
+    private final Timers timers;
 
-    private final PublishSubject<Counter> updatedCounterActionSubject = PublishSubject.create();
+    private final PublishSubject<Counter> updateCounterActionSubject = PublishSubject.create();
     private final BehaviorSubject<UiRunningCounterState> stateSubject = BehaviorSubject.create();
 
     private final CompositeDisposable stateDisposables = new CompositeDisposable();
     private Disposable mainDisposable;
 
-    private Map<Integer, CountDownTimer> timerMap = new HashMap<>();
-
     public RunningCounterPresenter(GetRunningCountersUpdatesInteractor getRunningCountersUpdatesInteractor,
                                    GetCounterInteractor getCounterInteractor,
                                    UpdateCounterInteractor updateCounterInteractor,
-                                   UiCounterItemMapper uiCounterItemMapper) {
+                                   UiCounterItemMapper uiCounterItemMapper,
+                                   Timers timers) {
         this.getRunningCountersUpdatesInteractor = getRunningCountersUpdatesInteractor;
         this.getCounterInteractor = getCounterInteractor;
         this.updateCounterInteractor = updateCounterInteractor;
         this.uiCounterItemMapper = uiCounterItemMapper;
+        this.timers = timers;
 
         init();
     }
@@ -57,7 +54,7 @@ public class RunningCounterPresenter {
                         .map((Function<List<UiCounterItem>, UiRunningCounterState.Part>) UiRunningCounterState.Part.RunningCounterList::new)
                         .onErrorReturn(UiRunningCounterState.Part.Error::new));
 
-        Observable<UiRunningCounterState.Part> updateCounter = updatedCounterActionSubject
+        Observable<UiRunningCounterState.Part> updateCounter = updateCounterActionSubject
                 .flatMap(counter -> updateCounterInteractor.updateCounter(counter)
                         .andThen(Observable.fromCallable((Callable<UiRunningCounterState.Part>) UiRunningCounterState.Part.CounterUpdated::new))
                         .onErrorReturn(UiRunningCounterState.Part.Error::new));
@@ -86,52 +83,47 @@ public class RunningCounterPresenter {
     }
 
     public void startCounter(final int counterId) {
-        CountDownTimer timerInMap = timerMap.get(counterId);
-        if (timerInMap != null) {
+        if (timers.hasTimer(counterId)){
             return;
         }
         Disposable disposable = getCounterInteractor.getCounter(counterId)
                 .subscribe(counter -> {
-                    CountDownTimer timer = new CountDownTimer(20000, 51) {
+                    timers.startNew(counterId, counter.getValue(), new Timers.TimerListener(){
 
+                        @Override
                         public void onTick(long millisUntilFinished) {
                             Counter newCounter = counter.toBuilder()
                                     .value(millisUntilFinished)
                                     .isRunning(true)
                                     .build();
-                            updatedCounterActionSubject.onNext(newCounter);
+                            updateCounterActionSubject.onNext(newCounter);
                         }
 
+                        @Override
                         public void onFinish() {
                             Counter newCounter = counter.toBuilder()
                                     .value(0)
                                     .isRunning(false)
                                     .build();
-                            updatedCounterActionSubject.onNext(newCounter);
-                            timerMap.remove(counterId);
+                            updateCounterActionSubject.onNext(newCounter);
+                            timers.remove(counterId);
                         }
-
-                    };
-                    timerMap.put(counterId, timer);
-                    timer.start();
+                    });
                 });
         stateDisposables.add(disposable);
     }
 
     public void stopCounter(final int counterId) {
-        CountDownTimer timerInMap = timerMap.get(counterId);
-        if (timerInMap == null) {
+        if(!timers.hasTimer(counterId)){
             return;
         }
         Disposable disposable = getCounterInteractor.getCounter(counterId)
                 .subscribe(counter -> {
-                    timerInMap.cancel();
-
                     Counter newCounter = counter.toBuilder()
                             .isRunning(false)
                             .build();
-                    updatedCounterActionSubject.onNext(newCounter);
-                    timerMap.remove(counterId);
+                    updateCounterActionSubject.onNext(newCounter);
+                    timers.remove(counterId);
                 });
         stateDisposables.add(disposable);
     }

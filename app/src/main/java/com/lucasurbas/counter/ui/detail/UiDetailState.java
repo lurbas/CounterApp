@@ -69,5 +69,13 @@ public abstract class UiDetailState {
                         .build();
             }
         }
+
+        class CounterUpdated implements UiDetailState.Part {
+
+            @Override
+            public UiDetailState computeNewState(UiDetailState previousState) {
+                return previousState;
+            }
+        }
     }
 }

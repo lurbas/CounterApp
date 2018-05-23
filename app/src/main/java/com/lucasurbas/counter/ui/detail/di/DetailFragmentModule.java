@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 
 import com.lucasurbas.counter.app.di.vm.ViewModelFactory;
 import com.lucasurbas.counter.app.di.vm.ViewModelKey;
+import com.lucasurbas.counter.service.usecase.GetCounterInteractor;
+import com.lucasurbas.counter.service.usecase.UpdateCounterInteractor;
 import com.lucasurbas.counter.ui.detail.DetailPresenter;
 import com.lucasurbas.counter.ui.detail.mapper.UiCounterDetailMapper;
 import com.lucasurbas.counter.ui.detail.usecase.GetCounterUpdateInteractor;
@@ -26,7 +28,12 @@ public class DetailFragmentModule {
     @IntoMap
     @ViewModelKey(DetailPresenter.class)
     ViewModel provideViewModel(GetCounterUpdateInteractor getCounterUpdateInteractor,
+                               GetCounterInteractor getCounterInteractor,
+                               UpdateCounterInteractor updateCounterInteractor,
                                UiCounterDetailMapper uiMapper) {
-        return new DetailPresenter(getCounterUpdateInteractor, uiMapper);
+        return new DetailPresenter(getCounterUpdateInteractor,
+                getCounterInteractor,
+                updateCounterInteractor,
+                uiMapper);
     }
 }

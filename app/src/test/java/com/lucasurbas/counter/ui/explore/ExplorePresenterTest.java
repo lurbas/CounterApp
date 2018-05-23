@@ -1,5 +1,6 @@
 package com.lucasurbas.counter.ui.explore;
 
+import com.lucasurbas.counter.data.model.Counter;
 import com.lucasurbas.counter.ui.explore.mapper.UiCounterItemMapper;
 import com.lucasurbas.counter.ui.explore.usecase.GetCountersUpdatesInteractor;
 
@@ -12,16 +13,23 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import io.reactivex.Observable;
+import java.util.Arrays;
+import java.util.List;
 
+import io.reactivex.subjects.PublishSubject;
+
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExplorePresenterTest {
 
-    private static final String USER_ID = "1";
-    private static final Throwable ERROR = new Throwable("error");
+    private static final int ID_1 = 1;
+    private static final Counter COUNTER_1 = Counter.builder().id(ID_1).value(0).build();
+    private static final List<Counter> COUNTER_LIST = Arrays.asList(COUNTER_1);
 
     @Mock
     private GetCountersUpdatesInteractor getCountersUpdatesInteractor;
@@ -31,12 +39,14 @@ public class ExplorePresenterTest {
     private ArgumentCaptor<UiExploreState> argumentCaptor;
 
     private UiCounterItemMapper uiCounterItemMapper = new UiCounterItemMapper();
+    private PublishSubject<List<Counter>> subject;
 
     private ExplorePresenter sut;
 
     @Before
     public void setup() {
-        given(getCountersUpdatesInteractor.getCountersUpdates()).willReturn(Observable.empty());
+        subject = PublishSubject.create();
+        given(getCountersUpdatesInteractor.getCountersUpdates()).willReturn(subject);
         sut = new ExplorePresenter(getCountersUpdatesInteractor, uiCounterItemMapper);
     }
 
@@ -47,55 +57,52 @@ public class ExplorePresenterTest {
 
     @Test
     public void firstAttachViewEmitsInitialState() {
+
         sut.attachView(view);
 
         verify(view).render(UiExploreState.initialState());
     }
 
-//    @Test
-//    public void loadPostsShowsLoadingIndicator() {
-//        given(loadPostsInteractor.loadPostsToRepository(USER_ID)).willReturn(Completable.complete());
-//        sut.attachView(view);
-//
-//        sut.loadPosts(USER_ID);
-//
-//        verify(view, times(3)).render(argumentCaptor.capture());
-//        List<UiExploreState> uiExploreStateList = argumentCaptor.getAllValues();
-//        assertEquals(UiExploreState.initialState(), uiExploreStateList.get(0));
-//        assertEquals(true, uiExploreStateList.get(1).getIsLoading());
-//        assertEquals(false, uiExploreStateList.get(2).getIsLoading());
-//    }
-//
-//    @Test
-//    public void dontEmitItemsIfViewNotAttached() {
-//        given(loadPostsInteractor.loadPostsToRepository(USER_ID)).willReturn(Completable.complete());
-//
-//        sut.loadPosts(USER_ID);
-//
-//        verify(view, never()).render(argumentCaptor.capture());
-//    }
-//
-//    @Test
-//    public void dontEmitItemsIfViewDetached() {
-//        given(loadPostsInteractor.loadPostsToRepository(USER_ID)).willReturn(Completable.complete());
-//        sut.attachView(view);
-//        sut.detachView();
-//
-//        sut.loadPosts(USER_ID);
-//
-//        verify(view, times(1)).render(UiExploreState.initialState());
-//    }
-//
-//    @Test
-//    public void emitLastStateWhenViewReAttached() {
-//        given(loadPostsInteractor.loadPostsToRepository(USER_ID)).willReturn(Completable.error(ERROR));
-//        sut.loadPosts(USER_ID);
-//
-//        sut.attachView(view);
-//
-//        verify(view, times(1)).render(argumentCaptor.capture());
-//        UiExploreState uiExploreState = argumentCaptor.getValue();
-//        assertEquals(ERROR, uiExploreState.getError());
-//    }
+    @Test
+    public void emitNewStateWhenCounterListUpdated() {
+        sut.attachView(view);
+
+        subject.onNext(COUNTER_LIST);
+
+        verify(view, times(2)).render(argumentCaptor.capture());
+        UiExploreState uiExploreState = argumentCaptor.getValue();
+        assertEquals(2, uiExploreState.getItemList().size());
+        assertEquals(ID_1, uiExploreState.getItemList().get(1).getId());
+    }
+
+    @Test
+    public void dontEmitItemsIfViewNotAttached() {
+
+        subject.onNext(COUNTER_LIST);
+
+        verify(view, never()).render(argumentCaptor.capture());
+    }
+
+    @Test
+    public void dontEmitItemsIfViewDetached() {
+        sut.attachView(view);
+        sut.detachView();
+
+        subject.onNext(COUNTER_LIST);
+
+        verify(view, times(1)).render(UiExploreState.initialState());
+    }
+
+    @Test
+    public void emitLastStateWhenViewReAttached() {
+        subject.onNext(COUNTER_LIST);
+
+        sut.attachView(view);
+
+        verify(view, times(1)).render(argumentCaptor.capture());
+        UiExploreState uiExploreState = argumentCaptor.getValue();
+        assertEquals(2, uiExploreState.getItemList().size());
+        assertEquals(ID_1, uiExploreState.getItemList().get(1).getId());
+    }
 
 }

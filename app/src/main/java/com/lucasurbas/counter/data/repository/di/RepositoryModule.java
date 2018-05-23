@@ -14,7 +14,9 @@ public class RepositoryModule {
     @Provides
     @Singleton
     CounterRepository provideCounterRepository() {
-        return new MemoryCounterRepository();
+        MemoryCounterRepository repository = new MemoryCounterRepository();
+        repository.initData();
+        return repository;
     }
 
 }

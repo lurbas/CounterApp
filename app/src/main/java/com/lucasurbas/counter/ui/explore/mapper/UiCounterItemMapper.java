@@ -1,7 +1,5 @@
 package com.lucasurbas.counter.ui.explore.mapper;
 
-import android.util.Log;
-
 import com.lucasurbas.counter.data.model.Counter;
 import com.lucasurbas.counter.ui.explore.model.UiCounterItem;
 
@@ -17,7 +15,6 @@ public class UiCounterItemMapper {
     }
 
     public UiCounterItem toUiCounterItem(Counter counter) {
-        Log.v("TAG_UiCounterItemMapper", counter.toString());
         return UiCounterItem.builder()
                 .id(counter.getId())
                 .stringValue(formatMillis(counter.getValue()))

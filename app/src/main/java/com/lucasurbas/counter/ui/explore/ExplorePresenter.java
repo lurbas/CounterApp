@@ -1,7 +1,6 @@
 package com.lucasurbas.counter.ui.explore;
 
 import android.arch.lifecycle.ViewModel;
-import android.util.Log;
 
 import com.lucasurbas.counter.ui.explore.mapper.UiCounterItemMapper;
 import com.lucasurbas.counter.ui.explore.model.UiCounterItem;
@@ -14,14 +13,12 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.PublishSubject;
 
 public class ExplorePresenter extends ViewModel {
 
     private final GetCountersUpdatesInteractor getCountersUpdatesInteractor;
     private final UiCounterItemMapper uiCounterItemMapper;
 
-    private final PublishSubject<String> createCounterActionSubject = PublishSubject.create();
     private final BehaviorSubject<UiExploreState> stateSubject = BehaviorSubject.create();
 
     private final CompositeDisposable stateDisposables = new CompositeDisposable();
@@ -36,7 +33,6 @@ public class ExplorePresenter extends ViewModel {
     }
 
     private void init() {
-        Observable<UiExploreState.Part> loadCountersAction = Observable.empty();
 
         Observable<UiExploreState.Part> getCountersUpdates = getCountersUpdatesInteractor.getCountersUpdates()
                 .flatMap(counterList -> Observable.fromIterable(counterList)
@@ -46,14 +42,7 @@ public class ExplorePresenter extends ViewModel {
                         .map((Function<List<UiCounterItem>, UiExploreState.Part>) UiExploreState.Part.CounterList::new)
                         .onErrorReturn(UiExploreState.Part.Error::new));
 
-//        Flowable<UiExploreState.Part> getCountersUpdates = getCountersUpdatesInteractor.getCountersUpdates()
-//                .flatMap(counterList -> Flowable.fromIterable(counterList)
-//                        .map(uiCounterItemMapper::toUiCounterItem)
-//                        .toList()
-//                        .map((Function<List<UiCounterItem>, UiExploreState.Part>) UiExploreState.Part.CounterList::new)
-//                        .onErrorReturn(UiExploreState.Part.Error::new);
-
-        mainDisposable = Observable.merge(loadCountersAction, getCountersUpdates)
+        mainDisposable = getCountersUpdates
                 .scan(UiExploreState.initialState(), this::viewStateReducer)
                 .distinctUntilChanged()
                 .subscribe(this::nextState);
@@ -64,7 +53,6 @@ public class ExplorePresenter extends ViewModel {
     }
 
     private void nextState(UiExploreState state) {
-        Log.v("TAG_ExplorePresenter", state.toString());
         stateSubject.onNext(state);
     }
 
@@ -81,10 +69,6 @@ public class ExplorePresenter extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         mainDisposable.dispose();
-    }
-
-    public void createCounter() {
-        createCounterActionSubject.onNext("");
     }
 
     public interface View {

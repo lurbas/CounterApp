@@ -7,8 +7,6 @@ public abstract class Counter {
 
     public abstract int getId();
 
-    public abstract long getInitialValue();
-
     public abstract long getValue();
 
     public abstract boolean getIsRunning();
@@ -24,8 +22,6 @@ public abstract class Counter {
     public abstract static class Builder {
 
         public abstract Builder id(int value);
-
-        public abstract Builder initialValue(long value);
 
         public abstract Builder value(long value);
 
