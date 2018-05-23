@@ -1,11 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 ext {
     versions = [
+            kotlin          : '1.2.41',
             android         : [
-                    support       : '27.1.0',
+                    support       : '27.1.1',
                     constraint    : '1.1.0-beta5',
-                    architecture  : '1.1.0',
+                    architecture  : '1.1.1',
             ],
             dagger          : '2.11',
             butterknife     : '8.8.1',
@@ -29,7 +32,7 @@ ext {
             android    : [
                     compileSdkVersion : 27,
                     minSdkVersion     : 15,
-                    buildToolsVersion : '26.0.3',
+                    buildToolsVersion : '27.0.3',
             ],
             versionCode: 1,
             versionName: '1.0',
@@ -64,49 +67,54 @@ android {
 
 dependencies {
 
+    // Kotlin stdlib
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
     // Android Support
-    compile "com.android.support:appcompat-v7:$versions.android.support"
-    compile "com.android.support:support-v4:$versions.android.support"
-    compile "com.android.support:cardview-v7:$versions.android.support"
-    compile "com.android.support:design:$versions.android.support"
-    compile "com.android.support.constraint:constraint-layout:$versions.android.constraint"
-    compile "com.android.support:support-annotations:$versions.android.support"
+    implementation "com.android.support:appcompat-v7:$versions.android.support"
+    implementation "com.android.support:support-v4:$versions.android.support"
+    implementation "com.android.support:cardview-v7:$versions.android.support"
+    implementation "com.android.support:design:$versions.android.support"
+    implementation "com.android.support.constraint:constraint-layout:$versions.android.constraint"
+    implementation "com.android.support:support-annotations:$versions.android.support"
 
     // Android Architecture
-    compile "android.arch.lifecycle:runtime:$versions.android.architecture"
-    compile "android.arch.lifecycle:extensions:$versions.android.architecture"
-    annotationProcessor "android.arch.lifecycle:compiler:$versions.android.architecture"
+    implementation "android.arch.lifecycle:runtime:$versions.android.architecture"
+    implementation "android.arch.lifecycle:extensions:$versions.android.architecture"
+    kapt "android.arch.lifecycle:compiler:$versions.android.architecture"
 
     // Dagger
-    compile "com.google.dagger:dagger:$versions.dagger"
-    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
 
     // Butterknife
-    compile "com.jakewharton:butterknife:$versions.butterknife"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$versions.butterknife"
+    implementation "com.jakewharton:butterknife:$versions.butterknife"
+    kapt "com.jakewharton:butterknife-compiler:$versions.butterknife"
 
     // AutoValue
     compileOnly "com.jakewharton.auto.value:auto-value-annotations:$versions.autovalue.main"
-    annotationProcessor "com.google.auto.value:auto-value:$versions.autovalue.main"
-    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$versions.autovalue.parcel"
-    annotationProcessor "com.github.reggar:auto-value-ignore-hash-equals:$versions.autovalue.ignore"
+    kapt "com.google.auto.value:auto-value:$versions.autovalue.main"
+    kapt "com.ryanharter.auto.value:auto-value-parcel:$versions.autovalue.parcel"
+    kapt "com.github.reggar:auto-value-ignore-hash-equals:$versions.autovalue.ignore"
 
     // Rx
-    compile "io.reactivex.rxjava2:rxjava:$versions.rxjava"
-    compile "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
-    compile "com.annimon:stream:$versions.stream"
+    implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+    implementation "com.annimon:stream:$versions.stream"
 
     // Adapter Delegates
-    compile "com.hannesdorfmann:adapterdelegates3:$versions.adapterdelegates"
+    implementation "com.hannesdorfmann:adapterdelegates3:$versions.adapterdelegates"
 
     // Image Loading
-    compile "com.github.bumptech.glide:glide:$versions.glide"
-    annotationProcessor "com.github.bumptech.glide:compiler:$versions.glide"
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+    kapt "com.github.bumptech.glide:compiler:$versions.glide"
 
     // Test
-    testCompile "junit:junit:$versions.testing.junit"
-    testCompile "org.mockito:mockito-core:$versions.testing.mockito"
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$versions.testing.espresso", {
+    testImplementation "junit:junit:$versions.testing.junit"
+    testImplementation "org.mockito:mockito-core:$versions.testing.mockito"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$versions.testing.espresso", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
+
+kapt.generateStubs = true

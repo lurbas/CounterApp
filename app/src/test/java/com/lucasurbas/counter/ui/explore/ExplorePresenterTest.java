@@ -60,7 +60,7 @@ public class ExplorePresenterTest {
 
         sut.attachView(view);
 
-        verify(view).render(UiExploreState.initialState());
+        verify(view).render(new UiExploreState());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ExplorePresenterTest {
 
         subject.onNext(COUNTER_LIST);
 
-        verify(view, times(1)).render(UiExploreState.initialState());
+        verify(view, times(1)).render(new UiExploreState());
     }
 
     @Test

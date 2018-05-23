@@ -43,7 +43,7 @@ public class ExplorePresenter extends ViewModel {
                         .onErrorReturn(UiExploreState.Part.Error::new));
 
         mainDisposable = getCountersUpdates
-                .scan(UiExploreState.initialState(), this::viewStateReducer)
+                .scan(new UiExploreState(), this::viewStateReducer)
                 .distinctUntilChanged()
                 .subscribe(this::nextState);
     }
