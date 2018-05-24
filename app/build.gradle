@@ -94,8 +94,6 @@ dependencies {
     // AutoValue
     compileOnly "com.jakewharton.auto.value:auto-value-annotations:$versions.autovalue.main"
     kapt "com.google.auto.value:auto-value:$versions.autovalue.main"
-    kapt "com.ryanharter.auto.value:auto-value-parcel:$versions.autovalue.parcel"
-    kapt "com.github.reggar:auto-value-ignore-hash-equals:$versions.autovalue.ignore"
 
     // Rx
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava"
@@ -104,10 +102,6 @@ dependencies {
 
     // Adapter Delegates
     implementation "com.hannesdorfmann:adapterdelegates3:$versions.adapterdelegates"
-
-    // Image Loading
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
 
     // Test
     testImplementation "junit:junit:$versions.testing.junit"

@@ -6,8 +6,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class UiCounterItemMapper @Inject
-constructor() {
+class UiCounterItemMapper @Inject constructor() {
 
     fun toUiCounterItem(counter: Counter): UiCounterItem {
         return UiCounterItem(
