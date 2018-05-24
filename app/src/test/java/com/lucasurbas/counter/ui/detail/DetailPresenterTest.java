@@ -32,8 +32,8 @@ import static org.mockito.Mockito.when;
 public class DetailPresenterTest {
 
     private static final int ID_1 = 1;
-    private static final Counter COUNTER_1 = Counter.builder().id(ID_1).value(0).build();
-    private static final Counter COUNTER_1_MILLIS = Counter.builder().id(ID_1).value(100).build();
+    private static final Counter COUNTER_1 = new Counter(ID_1, 0, false);
+    private static final Counter COUNTER_1_MILLIS = new Counter(ID_1, 100, false);
 
     @Mock
     private GetCounterUpdateInteractor getCounterUpdateInteractor;
@@ -71,7 +71,7 @@ public class DetailPresenterTest {
 
         sut.attachView(view);
 
-        verify(view).render(UiDetailState.initialState());
+        verify(view).render(new UiDetailState());
     }
 
     @Test

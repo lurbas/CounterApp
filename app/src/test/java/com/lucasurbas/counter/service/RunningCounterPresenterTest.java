@@ -34,7 +34,7 @@ import static org.mockito.Mockito.verify;
 public class RunningCounterPresenterTest {
 
     private static final int ID_1 = 1;
-    private static final Counter COUNTER_1 = Counter.builder().id(ID_1).value(0).build();
+    private static final Counter COUNTER_1 = new Counter(ID_1, 0, false);
     private static final List<Counter> COUNTER_LIST = Arrays.asList(COUNTER_1);
 
     @Mock
@@ -77,7 +77,7 @@ public class RunningCounterPresenterTest {
 
         sut.attachView(view);
 
-        verify(view).render(UiRunningCounterState.initialState());
+        verify(view).render(new UiRunningCounterState());
     }
 
     @Test

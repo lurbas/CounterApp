@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 public class GetCountersUpdatesInteractorTest {
 
     private static final int ID_1 = 1;
-    private static final Counter COUNTER_1 = Counter.builder().id(ID_1).value(0).build();
+    private static final Counter COUNTER_1 = new Counter(ID_1, 0, false);
     private static final List<Counter> COUNTER_LIST = Arrays.asList(COUNTER_1);
 
     @Mock

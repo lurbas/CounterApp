@@ -25,8 +25,8 @@ public class GetRunningCountersUpdatesInteractorTest {
 
     private static final int ID_1 = 1;
     private static final int ID_2 = 2;
-    private static final Counter COUNTER_1 = Counter.builder().id(ID_1).value(0).build();
-    private static final Counter COUNTER_2_RUNNING = Counter.builder().id(ID_2).isRunning(true).value(0).build();
+    private static final Counter COUNTER_1 = new Counter(ID_1, 0, false);
+    private static final Counter COUNTER_2_RUNNING = new Counter(ID_2, 0, true);
     private static final List<Counter> COUNTER_LIST = Arrays.asList(COUNTER_1, COUNTER_2_RUNNING);
 
     @Mock

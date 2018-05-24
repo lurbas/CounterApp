@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 public class UpdateCounterInteractorTest {
 
     private static final int ID_1 = 1;
-    private static final Counter COUNTER_1_RUNNING = Counter.builder().id(ID_1).isRunning(true).value(0).build();
+    private static final Counter COUNTER_1_RUNNING = new Counter(ID_1, 0, true);
 
     @Mock
     private CounterRepository counterRepository;

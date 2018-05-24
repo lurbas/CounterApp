@@ -86,8 +86,8 @@ class DetailFragment : BaseFragment(), DetailPresenter.View {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun render(uiDetailState: UiDetailState) {
-        val counter = uiDetailState.counter
+    override fun render(detailState: UiDetailState) {
+        val counter = detailState.counter
         counter?.let {
             ButterKnife.apply(presetViews, { view: View, _: Int -> view.setEnabled(!it.isRunning) })
             startButton.visibility = if (it.isRunning) GONE else VISIBLE
@@ -95,7 +95,7 @@ class DetailFragment : BaseFragment(), DetailPresenter.View {
             valueView.text = it.stringValue
         }
 
-        uiDetailState.error?.let {
+        detailState.error?.let {
             Snackbar.make(view!!, R.string.error_general, Snackbar.LENGTH_LONG).show()
         }
     }

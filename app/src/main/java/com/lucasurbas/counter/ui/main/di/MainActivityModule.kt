@@ -1,17 +1,17 @@
 package com.lucasurbas.counter.ui.main.di
 
+import android.support.v4.app.FragmentActivity
+import com.lucasurbas.counter.app.di.scope.ActivityScope
+import com.lucasurbas.counter.ui.main.MainNavigator
 import dagger.Module
 import dagger.Provides
-import com.lucasurbas.counter.app.di.scope.ActivityScope
-import com.lucasurbas.counter.ui.BaseActivity
-import com.lucasurbas.counter.ui.main.MainNavigator
 
 @Module
 class MainActivityModule {
 
     @Provides
     @ActivityScope
-    internal fun provideMainNavigator(baseActivity: BaseActivity<*>): MainNavigator {
-        return MainNavigator(baseActivity)
+    internal fun provideMainNavigator(activity: FragmentActivity): MainNavigator {
+        return MainNavigator(activity)
     }
 }
