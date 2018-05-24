@@ -1,9 +1,11 @@
 package com.lucasurbas.counter.ui.detail
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
@@ -68,6 +70,7 @@ class DetailFragment : BaseFragment(), DetailPresenter.View {
         super.onViewCreated(view, savedInstanceState)
         injectFragment()
         unbinder = ButterKnife.bind(this, view)
+        postponeEnterTransition()
         setupToolbar()
 
         presenter.attachView(this)
@@ -93,6 +96,11 @@ class DetailFragment : BaseFragment(), DetailPresenter.View {
             startButton.visibility = if (it.isRunning) GONE else VISIBLE
             stopButton.visibility = if (it.isRunning) VISIBLE else GONE
             valueView.text = it.stringValue
+            if (valueView.background == null) {
+                valueView.setBackgroundColor(Color.parseColor(it.color))
+            }
+            ViewCompat.setTransitionName(valueView, "backgroundImage${counter.id}");
+            startPostponedEnterTransition()
         }
 
         detailState.error?.let {

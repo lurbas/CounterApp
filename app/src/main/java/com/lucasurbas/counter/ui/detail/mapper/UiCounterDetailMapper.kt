@@ -11,7 +11,8 @@ class UiCounterDetailMapper @Inject constructor() {
     fun toUiCounterDetail(counter: Counter): UiCounterDetail {
         return UiCounterDetail(id = counter.id,
                 stringValue = formatMillis(counter.value),
-                isRunning = counter.isRunning)
+                isRunning = counter.isRunning,
+                color = counter.color)
     }
 
     fun formatMillis(timeInMillis: Long): String {

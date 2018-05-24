@@ -20,10 +20,10 @@ class MemoryCounterRepository : CounterRepository {
     }
 
     fun initData() {
-        counterList.add(Counter(id = 1, value = TimeUnit.SECONDS.toMillis(30)))
-        counterList.add(Counter(id = 2, value = TimeUnit.MINUTES.toMillis(2)))
-        counterList.add(Counter(id = 3, value = TimeUnit.MINUTES.toMillis(5)))
-        counterList.add(Counter(id = 4, value = TimeUnit.MINUTES.toMillis(30)))
+        counterList.add(Counter(id = 1, value = TimeUnit.SECONDS.toMillis(30), color = "#90CCF4"))
+        counterList.add(Counter(id = 2, value = TimeUnit.MINUTES.toMillis(2), color = "#F3D250"))
+        counterList.add(Counter(id = 3, value = TimeUnit.MINUTES.toMillis(5), color = "#F78888"))
+        counterList.add(Counter(id = 4, value = TimeUnit.MINUTES.toMillis(30), color = "#93C95B"))
         counterListSubject = BehaviorSubject.createDefault(counterList)
     }
 

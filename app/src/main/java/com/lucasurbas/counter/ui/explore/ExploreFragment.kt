@@ -83,7 +83,7 @@ class ExploreFragment : BaseFragment(), ExplorePresenter.View {
     }
 
     private fun setupView() {
-        exploreAdapter = ExploreAdapter { navigateToCounterDetailScreen(it) }
+        exploreAdapter = ExploreAdapter { id, view -> navigateToCounterDetailScreen(id, view) }
         exploreAdapter.setHasStableIds(true)
         val gridLayoutManager = GridLayoutManager(activity, COLUMNS_COUNT)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -97,8 +97,8 @@ class ExploreFragment : BaseFragment(), ExplorePresenter.View {
         exploreRecyclerView.addItemDecoration(SpaceItemDecoration(tileMargin))
     }
 
-    private fun navigateToCounterDetailScreen(counterId: Int) {
-        navigator.navigateToDetailScreen(counterId)
+    private fun navigateToCounterDetailScreen(counterId: Int, sharedView: View) {
+        navigator.navigateToDetailScreen(counterId, sharedView, this)
     }
 
     override fun render(exploreState: UiExploreState) {

@@ -1,11 +1,18 @@
 package com.lucasurbas.counter.ui.main
 
+import android.os.Build
+import android.support.transition.ChangeBounds
+import android.support.transition.ChangeTransform
+import android.support.transition.Fade
+import android.support.transition.TransitionSet
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import android.view.View
 import com.lucasurbas.counter.R
 import com.lucasurbas.counter.ui.detail.DetailFragment
 import com.lucasurbas.counter.ui.explore.ExploreFragment
+
 
 class MainNavigator(activity: FragmentActivity) {
 
@@ -23,10 +30,38 @@ class MainNavigator(activity: FragmentActivity) {
                 .commit()
     }
 
-    fun navigateToDetailScreen(counterId: Int) {
+    fun navigateToDetailScreen(counterId: Int, sharedElement: View, previousFragment: Fragment) {
+
+        val nextFragment = DetailFragment.newInstance(counterId)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            // 1. Exit for Previous Fragment
+            val exitFade = Fade()
+            previousFragment.setExitTransition(exitFade)
+
+            // 2. Shared Elements TransitionSet
+            val enterTransitionSet = TransitionSet()
+            enterTransitionSet.addTransition(ChangeBounds())
+            enterTransitionSet.addTransition(ChangeTransform())
+            nextFragment.setSharedElementEnterTransition(enterTransitionSet)
+
+            // 3. Enter Transition for New Fragment
+            val enterFade = Fade()
+            enterFade.startDelay = 300
+            nextFragment.setEnterTransition(enterFade)
+
+            // 4. Shared Elements Transition
+            val exitTransitionSet = TransitionSet()
+            exitTransitionSet.addTransition(ChangeBounds())
+            exitTransitionSet.addTransition(ChangeTransform())
+            nextFragment.setSharedElementReturnTransition(exitTransitionSet)
+        }
+
         fragmentManager.beginTransaction()
-                .replace(containerId, DetailFragment.newInstance(counterId), DetailFragment.TAG)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .setReorderingAllowed(true)
+                .addSharedElement(sharedElement, "backgroundImage$counterId")
+                .replace(containerId, nextFragment, DetailFragment.TAG)
                 .addToBackStack(null)
                 .commit()
     }

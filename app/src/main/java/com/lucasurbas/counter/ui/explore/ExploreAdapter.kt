@@ -3,6 +3,7 @@ package com.lucasurbas.counter.ui.explore
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import com.hannesdorfmann.adapterdelegates3.AdapterDelegatesManager
 import com.lucasurbas.counter.ui.explore.model.UiListItem
@@ -10,7 +11,7 @@ import com.lucasurbas.counter.utils.ListItemDiffCallback
 import java.util.*
 
 class ExploreAdapter(
-        counterItemClickListener: (Int) -> Unit
+        counterItemClickListener: (Int, View) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {

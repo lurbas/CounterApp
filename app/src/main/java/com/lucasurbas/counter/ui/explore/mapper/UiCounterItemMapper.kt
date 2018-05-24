@@ -12,7 +12,8 @@ class UiCounterItemMapper @Inject constructor() {
         return UiCounterItem(
                 id = counter.id,
                 stringValue = formatMillis(counter.value),
-                isRunning = counter.isRunning)
+                isRunning = counter.isRunning,
+                color = counter.color)
     }
 
     fun formatMillis(timeInMillis: Long): String {
