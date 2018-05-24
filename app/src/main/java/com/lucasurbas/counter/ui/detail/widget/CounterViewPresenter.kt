@@ -7,7 +7,7 @@ import io.reactivex.subjects.PublishSubject
 class CounterViewPresenter {
 
     private val updateValueActionSubject = PublishSubject.create<Long>()
-    lateinit var mainDisposable: Disposable
+    var mainDisposable: Disposable? = null;
 
 
     fun start(view: CounterViewPresenter.View) {
@@ -26,7 +26,7 @@ class CounterViewPresenter {
     }
 
     fun destroy() {
-        mainDisposable.dispose()
+        mainDisposable?.dispose()
     }
 
     fun newValue(value: Long) {

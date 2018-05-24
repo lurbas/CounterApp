@@ -112,6 +112,6 @@ class DetailPresenterTest {
 
         verify(view, times(3)).render(capture(argumentCaptor))
         val (counter) = argumentCaptor.value
-        assertEquals("00:00:10", counter!!.stringValue)
+        assertEquals(100, counter!!.valueInMillis)
     }
 }
