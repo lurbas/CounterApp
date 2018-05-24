@@ -6,9 +6,9 @@ ext {
     versions = [
             kotlin          : '1.2.41',
             android         : [
-                    support       : '27.1.1',
-                    constraint    : '1.1.0-beta5',
-                    architecture  : '1.1.1',
+                    support     : '27.1.1',
+                    constraint  : '1.1.0-beta5',
+                    architecture: '1.1.1',
             ],
             dagger          : '2.11',
             butterknife     : '8.8.1',
@@ -16,23 +16,24 @@ ext {
             rxandroid       : '2.0.1',
             stream          : '1.1.9',
             autovalue       : [
-                    main   : '1.5',
-                    parcel : '0.2.6',
-                    ignore : '1.1.4',
+                    main  : '1.5',
+                    parcel: '0.2.6',
+                    ignore: '1.1.4',
             ],
             glide           : '4.1.1',
             adapterdelegates: '3.0.1',
             testing         : [
-                    junit   : '4.12',
-                    mockito : '2.5.5',
-                    espresso: '2.2.2',
+                    junit        : '4.12',
+                    mockito      : '2.5.5',
+                    mockitokotlin: '1.5.0',
+                    espresso     : '2.2.2',
             ],
     ]
     app = [
             android    : [
-                    compileSdkVersion : 27,
-                    minSdkVersion     : 15,
-                    buildToolsVersion : '27.0.3',
+                    compileSdkVersion: 27,
+                    minSdkVersion    : 15,
+                    buildToolsVersion: '27.0.3',
             ],
             versionCode: 1,
             versionName: '1.0',
@@ -106,6 +107,7 @@ dependencies {
     // Test
     testImplementation "junit:junit:$versions.testing.junit"
     testImplementation "org.mockito:mockito-core:$versions.testing.mockito"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$versions.testing.mockitokotlin"
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$versions.testing.espresso", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
