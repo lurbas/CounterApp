@@ -22,6 +22,7 @@ ext {
             ],
             glide           : '4.1.1',
             adapterdelegates: '3.0.1',
+            paperparcel     : '2.0.6',
             testing         : [
                     junit        : '4.12',
                     mockito      : '2.5.5',
@@ -32,7 +33,7 @@ ext {
     app = [
             android    : [
                     compileSdkVersion: 27,
-                    minSdkVersion    : 15,
+                    minSdkVersion    : 16,
                     buildToolsVersion: '27.0.3',
             ],
             versionCode: 1,
@@ -58,11 +59,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -103,6 +99,10 @@ dependencies {
 
     // Adapter Delegates
     implementation "com.hannesdorfmann:adapterdelegates3:$versions.adapterdelegates"
+
+    // Parcelable
+    implementation "nz.bradcampbell:paperparcel:$versions.paperparcel"
+    kapt "nz.bradcampbell:paperparcel-compiler:$versions.paperparcel"
 
     // Test
     testImplementation "junit:junit:$versions.testing.junit"
