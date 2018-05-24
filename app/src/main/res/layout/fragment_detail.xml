@@ -15,8 +15,8 @@
         android:text="@string/detail_header"
         android:textAllCaps="true" />
 
-    <TextView
-        android:id="@+id/value_view"
+    <com.lucasurbas.counter.ui.detail.widget.CounterView
+        android:id="@+id/counter_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="48dp"
@@ -28,6 +28,8 @@
         android:textColor="@android:color/white"
         android:textSize="22sp"
         android:textStyle="bold"
+        app:cv_primaryTextSize="12sp"
+        app:cv_secondaryTextSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="H,1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/value_view" />
+        app:layout_constraintTop_toBottomOf="@+id/counter_view" />
 
     <Button
         android:id="@+id/stop_button"
@@ -54,7 +56,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/value_view" />
+        app:layout_constraintTop_toBottomOf="@+id/counter_view" />
 
     <Button
         android:id="@+id/preset_1_button"
@@ -62,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:text="@string/detail_preset_1"
-        app:layout_constraintBottom_toTopOf="@+id/value_view"
+        app:layout_constraintBottom_toTopOf="@+id/counter_view"
         app:layout_constraintEnd_toStartOf="@+id/preset_2_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_view" />
@@ -72,7 +74,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/detail_preset_2"
-        app:layout_constraintBottom_toTopOf="@+id/value_view"
+        app:layout_constraintBottom_toTopOf="@+id/counter_view"
         app:layout_constraintEnd_toStartOf="@+id/preset_3_button"
         app:layout_constraintStart_toEndOf="@+id/preset_1_button"
         app:layout_constraintTop_toBottomOf="@+id/header_view" />
@@ -82,7 +84,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/detail_preset_3"
-        app:layout_constraintBottom_toTopOf="@+id/value_view"
+        app:layout_constraintBottom_toTopOf="@+id/counter_view"
         app:layout_constraintEnd_toStartOf="@+id/preset_4_button"
         app:layout_constraintStart_toEndOf="@+id/preset_2_button"
         app:layout_constraintTop_toBottomOf="@+id/header_view" />
@@ -93,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
         android:text="@string/detail_preset_4"
-        app:layout_constraintBottom_toTopOf="@+id/value_view"
+        app:layout_constraintBottom_toTopOf="@+id/counter_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/preset_3_button"
         app:layout_constraintTop_toBottomOf="@+id/header_view" />

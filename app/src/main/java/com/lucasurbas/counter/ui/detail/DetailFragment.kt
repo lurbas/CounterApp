@@ -13,7 +13,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import butterknife.*
 import com.lucasurbas.counter.R
 import com.lucasurbas.counter.app.di.FragmentModule
@@ -21,6 +20,7 @@ import com.lucasurbas.counter.app.di.helper.InjectHelper
 import com.lucasurbas.counter.service.RunningCounterService
 import com.lucasurbas.counter.ui.BaseFragment
 import com.lucasurbas.counter.ui.detail.di.DetailFragmentModule
+import com.lucasurbas.counter.ui.detail.widget.CounterView
 import com.lucasurbas.counter.ui.main.di.MainActivityComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -41,8 +41,8 @@ class DetailFragment : BaseFragment(), DetailPresenter.View {
         }
     }
 
-    @BindView(R.id.value_view)
-    lateinit var valueView: TextView
+    @BindView(R.id.counter_view)
+    lateinit var counterView: CounterView
     @BindView(R.id.start_button)
     lateinit var startButton: Button
     @BindView(R.id.stop_button)
@@ -95,11 +95,11 @@ class DetailFragment : BaseFragment(), DetailPresenter.View {
             ButterKnife.apply(presetViews, { view: View, _: Int -> view.setEnabled(!it.isRunning) })
             startButton.visibility = if (it.isRunning) GONE else VISIBLE
             stopButton.visibility = if (it.isRunning) VISIBLE else GONE
-            valueView.text = it.stringValue
-            if (valueView.background == null) {
-                valueView.setBackgroundColor(Color.parseColor(it.color))
+            counterView.setCounterValueInMillis(it.valueInMillis)
+            if (counterView.background == null) {
+                counterView.setBackgroundColor(Color.parseColor(it.color))
             }
-            ViewCompat.setTransitionName(valueView, "backgroundImage${counter.id}");
+            ViewCompat.setTransitionName(counterView, "backgroundImage${counter.id}");
             startPostponedEnterTransition()
         }
 

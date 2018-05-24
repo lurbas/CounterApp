@@ -5,6 +5,8 @@ import com.lucasurbas.counter.app.di.FragmentModule
 import com.lucasurbas.counter.app.di.scope.ActivityScope
 import com.lucasurbas.counter.ui.detail.di.DetailFragmentComponent
 import com.lucasurbas.counter.ui.detail.di.DetailFragmentModule
+import com.lucasurbas.counter.ui.detail.widget.di.CounterViewComponent
+import com.lucasurbas.counter.ui.detail.widget.di.CounterViewModule
 import com.lucasurbas.counter.ui.explore.di.ExploreFragmentComponent
 import com.lucasurbas.counter.ui.explore.di.ExploreFragmentModule
 import com.lucasurbas.counter.ui.main.MainActivity
@@ -21,4 +23,6 @@ interface MainActivityComponent {
 
     fun plus(fragmentModule: FragmentModule,
              detailFragmentModule: DetailFragmentModule): DetailFragmentComponent
+
+    fun plus(counterViewModule: CounterViewModule): CounterViewComponent
 }

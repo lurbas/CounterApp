@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/minute_left_digit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="0"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/minute_right_digit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/minute_right_digit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="0"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minute_left_digit"
+        app:layout_constraintEnd_toStartOf="@+id/minutes_divider"
+        app:layout_constraintStart_toEndOf="@+id/minute_left_digit" />
+
+    <TextView
+        android:id="@+id/minutes_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text=":"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minute_left_digit"
+        app:layout_constraintEnd_toStartOf="@+id/second_left_digit"
+        app:layout_constraintStart_toEndOf="@+id/minute_right_digit" />
+
+    <TextView
+        android:id="@+id/second_left_digit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="0"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/minute_left_digit"
+        app:layout_constraintEnd_toStartOf="@+id/second_right_digit"
+        app:layout_constraintStart_toEndOf="@+id/minutes_divider" />
+
+    <TextView
+        android:id="@+id/second_right_digit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="0"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minute_left_digit"
+        app:layout_constraintEnd_toStartOf="@+id/seconds_divider"
+        app:layout_constraintStart_toEndOf="@+id/second_left_digit" />
+
+    <TextView
+        android:id="@+id/seconds_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text=":"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minute_left_digit"
+        app:layout_constraintEnd_toStartOf="@+id/millis_digits"
+        app:layout_constraintStart_toEndOf="@+id/second_right_digit" />
+
+    <TextView
+        android:id="@+id/millis_digits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="00"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minute_left_digit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/seconds_divider" />
+
+
+</android.support.constraint.ConstraintLayout>
